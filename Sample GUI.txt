@@ -1,0 +1,125 @@
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")  #loading the necessary .net libraries (using void to suppress output)
+
+$form = New-Object System.Windows.Forms.Form 
+$form.Text = "AD User Creation"
+$form.Size = New-Object System.Drawing.Size(750,800) 
+$form.StartPosition = "CenterScreen"
+#################################################################################################################################################################################################### Start functions
+function Create-newuser {
+  
+
+ 
+}
+#################################################################################################################################################################################################### End Function
+
+#################################################################################################################################################################################################### Start Buttons
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(40,700)
+$OKButton.Size = New-Object System.Drawing.Size(90,23)
+$OKButton.Text = "Add"
+$OKButton.Add_Click({Return-DropDown}) #the action triggered by the button
+$Form.Controls.Add($OKButton) #activating the button inside the primary window
+
+$CancelButton = New-Object System.Windows.Forms.Button
+$CancelButton.Location = New-Object System.Drawing.Point(160,700)
+$CancelButton.Size = New-Object System.Drawing.Size(75,23)
+$CancelButton.Text = "Cancel"
+$CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton = $CancelButton
+$form.Controls.Add($CancelButton)
+#################################################################################################################################################################################################### End Buttons
+
+#################################################################################################################################################################################################### Start Label
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,90)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "PC Configuration"
+$form.Controls.Add($labelClub)
+
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,150)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "Group Description"
+$form.Controls.Add($labelClub)
+
+$labelFirst = New-Object System.Windows.Forms.Label
+$labelFirst.Location = New-Object System.Drawing.Point(10,20) 
+$labelFirst.Size = New-Object System.Drawing.Size(65,20) 
+$labelFirst.Text = "Machine ID:"
+$form.Controls.Add($labelFirst)
+
+
+
+#################################################################################################################################################################################################### Start ListBox
+
+$listBoxClub = New-Object System.Windows.Forms.ListBox 
+$listBoxClub.Location = New-Object System.Drawing.Size(50,170)
+$listBoxClub.Size = New-Object System.Drawing.Size(260,20) 
+$listBoxClub.Height = 80
+
+
+
+
+#################################################################################################################################################################################################### End ListBox
+
+#################################################################################################################################################################################################### Start ComboBox
+
+$arrayCompany=@("Special PC","Shopfloor PC")
+
+$comboBoxCompany = New-Object System.Windows.Forms.ComboBox 
+$comboBoxCompany.Location = New-Object System.Drawing.Size(10,120)
+$comboBoxCompany.Size = New-Object System.Drawing.Size(180,20) 
+$comboBoxCompany.DropDownHeight = 200 
+$Form.Controls.Add($comboBoxCompany) 
+
+foreach ($company in $arraycompany) {
+                      $comboBoxCompany.Items.Add($company)
+                              } 
+
+$comboBoxCompany_SelectedIndexChanged=
+{
+   If ($comboBoxCompany.text -eq "Special PC") 
+   {
+[void] $listBoxClub.Items.Add("site1")
+[void] $listBoxClub.Items.Add("site2")
+[void] $listBoxClub.Items.Add("site3")
+[void] $listBoxClub.Items.Add("site4")
+[void] $listBoxClub.Items.Add("site5")
+[void] $listBoxClub.Items.Add("site6")
+[void] $listBoxClub.Items.Add("site7")
+[void] $listBoxClub.Items.Add("site8")
+write-host "Special PC"
+
+ }
+   Else 
+   {
+[void] $listBoxClub.Items.Add("site9")
+[void] $listBoxClub.Items.Add("site10")
+[void] $listBoxClub.Items.Add("site11")
+[void] $listBoxClub.Items.Add("site12")
+[void] $listBoxClub.Items.Add("site13")
+[void] $listBoxClub.Items.Add("site14")
+[void] $listBoxClub.Items.Add("site15")
+[void] $listBoxClub.Items.Add("site16")
+write-host "Shpoflorr PC"
+ 
+   }
+   $form.Controls.Add($listBoxClub)
+}
+################ MUST CREATE BEFORE ASSIGN ################
+$comboBoxCompany.add_SelectedIndexChanged($comboBoxCompany_SelectedIndexChanged)
+
+#################################################################################################################################################################################################### End ComboBox
+
+#################################################################################################################################################################################################### Start Text Fields
+$textBoxFirst = New-Object System.Windows.Forms.TextBox 
+$textBoxFirst.Location = New-Object System.Drawing.Point(10,40) 
+$textBoxFirst.Size = New-Object System.Drawing.Size(165,20) 
+$form.Controls.Add($textBoxFirst)
+
+
+
+#################################################################################################################################################################################################### End Text Fields
+$form.Add_Shown({$textBoxFirst.Select()})
+[void] $form.ShowDialog()
