@@ -1,0 +1,83 @@
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")  #loading the necessary .net libraries (using void to suppress output)
+
+$form = New-Object System.Windows.Forms.Form 
+$form.Text = "AD PC Config"
+$form.Size = New-Object System.Drawing.Size(750,800) 
+$form.StartPosition = "CenterScreen"
+
+#################################################################################################################################################################################################### Start functions
+function Search_Hostname {
+  $Hostname = $textBox1.Text
+  $Hostname = "*Hostname*"
+
+  $Hostname_Result = Get-ADComputer -Filter {name -eq "$Hostname"}
+
+  $Machine_ID = $Hostname_Result
+ 
+}
+#################################################################################################################################################################################################### End Function
+
+#################################################################################################################################################################################################### Start Buttons
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(200,38)
+$OKButton.Size = New-Object System.Drawing.Size(90,23)
+$OKButton.Text = "Search"
+$OKButton.Add_Click({Search_Hostname}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton) 
+
+$CancelButton = New-Object System.Windows.Forms.Button
+$CancelButton.Location = New-Object System.Drawing.Point(300,38)
+$CancelButton.Size = New-Object System.Drawing.Size(75,23)
+$CancelButton.Text = "Cancel"
+$CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton = $CancelButton
+$form.Controls.Add($CancelButton)
+#################################################################################################################################################################################################### End Buttons
+
+#################################################################################################################################################################################################### Start Label
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,90)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "PC Configuration"
+$form.Controls.Add($labelClub)
+
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,150)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "Group Description"
+$form.Controls.Add($labelClub)
+
+$labelFirst = New-Object System.Windows.Forms.Label
+$labelFirst.Location = New-Object System.Drawing.Point(10,20) 
+$labelFirst.Size = New-Object System.Drawing.Size(65,20) 
+$labelFirst.Text = "Machine ID:"
+$form.Controls.Add($labelFirst)
+
+
+
+#################################################################################################################################################################################################### Start ListBox
+
+$listBoxClub = New-Object System.Windows.Forms.ListBox 
+$listBoxClub.Location = New-Object System.Drawing.Size(50,170)
+$listBoxClub.Size = New-Object System.Drawing.Size(260,20) 
+$listBoxClub.Height = 80
+
+
+
+
+#################################################################################################################################################################################################### End ListBox
+
+
+################################################################################################################################################################################################# Start Text Fields
+$textBox1 = New-Object System.Windows.Forms.TextBox 
+$textBox1.Location = New-Object System.Drawing.Point(10,40) 
+$textBox1.Size = New-Object System.Drawing.Size(165,20) 
+$form.Controls.Add($textBox1)
+
+
+
+#################################################################################################################################################################################################### End Text Fields
+$form.Add_Shown({$textbox1.Select()})
+[void] $form.ShowDialog()
