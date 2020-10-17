@@ -1,0 +1,190 @@
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")  #loading the necessary .net libraries (using void to suppress output)
+
+
+$form = New-Object System.Windows.Forms.Form 
+$form.Text = "AD PC Config"
+$form.Size = New-Object System.Drawing.Size(550,650) 
+$form.StartPosition = "CenterScreen"
+
+#################################################################################################################################################################################################### Start functions
+function Search_Hostname {
+  $Hostname = $textBox1.Text
+ 
+  $Hostname_Result = Get-ADComputer -Filter {name -eq "$Hostname"}
+
+  $Machine_ID = $Hostname_Result
+ 
+}
+
+
+function Search_AdminName {
+  $Dminname = $textBox2.Text
+ 
+  $Adminname_Result = Get-ADUser -Filter {name -eq "$Adminname"}
+
+  $AdminName = $Adminname_Result
+ 
+}
+#################################################################################################################################################################################################### End Function
+
+#################################################################################################################################################################################################### Start Buttons
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(200,38)
+$OKButton.Size = New-Object System.Drawing.Size(90,23)
+$OKButton.Text = "Search"
+$OKButton.Add_Click({Search_Hostname}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton) 
+
+$CancelButton = New-Object System.Windows.Forms.Button
+$CancelButton.Location = New-Object System.Drawing.Point(300,38)
+$CancelButton.Size = New-Object System.Drawing.Size(75,23)
+$CancelButton.Text = "Cancel"
+$CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton = $CancelButton
+$form.Controls.Add($CancelButton)
+
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(200,100)
+$OKButton.Size = New-Object System.Drawing.Size(90,23)
+$OKButton.Text = "Search"
+$OKButton.Add_Click({Search_AdminName}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton) 
+
+$CancelButton = New-Object System.Windows.Forms.Button
+$CancelButton.Location = New-Object System.Drawing.Point(300,100)
+$CancelButton.Size = New-Object System.Drawing.Size(75,23)
+$CancelButton.Text = "Cancel"
+$CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton = $CancelButton
+$form.Controls.Add($CancelButton)
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(200,180)
+$OKButton.Size = New-Object System.Drawing.Size(90,23)
+$OKButton.Text = "Proceed"
+$OKButton.Add_Click({Classify_System}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton)
+#################################################################################################################################################################################################### End Buttons
+
+#################################################################################################################################################################################################### Start Label
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,150)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "PC Configuration"
+$form.Controls.Add($labelClub)
+
+$labelClub = New-Object System.Windows.Forms.Label
+$labelClub.Location = New-Object System.Drawing.Point(10,230)
+$labelClub.Size = New-Object System.Drawing.Size(280,20) 
+$labelClub.Text = "Group Description"
+$form.Controls.Add($labelClub)
+
+$labelFirst = New-Object System.Windows.Forms.Label
+$labelFirst.Location = New-Object System.Drawing.Point(10,20) 
+$labelFirst.Size = New-Object System.Drawing.Size(65,20) 
+$labelFirst.Text = "Machine ID"
+$form.Controls.Add($labelFirst)
+
+$labelFirst = New-Object System.Windows.Forms.Label
+$labelFirst.Location = New-Object System.Drawing.Point(10,75) 
+$labelFirst.Size = New-Object System.Drawing.Size(90,20) 
+$labelFirst.Text = "Admin Name"
+$form.Controls.Add($labelFirst)
+
+
+#################################################################################################################################################################################################### Start ListBox
+Function Classify_System{
+
+
+
+$Selection = $DropDownBox.SelectedItem.ToString()
+
+
+
+if($Selection -eq "Shopfloor_PC"){
+
+
+
+$OutputBox.Text =  Get-Service | Out-String
+
+
+
+}
+
+elseif($Selection -eq "Special_PC"){
+
+
+
+$OutputBox.Text = Get-Process | Out-String
+
+
+}
+
+}
+
+
+
+
+
+$Form.Controls.Add($DropDownBox)
+
+
+
+$Details = @("Shopfloor_PC","Special_PC")
+
+
+
+foreach($Detail in $Details){
+
+
+
+$DropDownBox.Items.Add($Detail)
+
+
+
+}
+
+
+$DropDownBox = New-Object System.Windows.Forms.ComboBox
+
+$DropDownBox.Location = New-Object System.Drawing.Size(10,180)
+
+$DropDownBox.Size = New-Object System.Drawing.Size(180,20) 
+
+$DropDownBox.Height = 200
+
+
+
+$Form.Controls.Add($DropDownBox)
+
+
+
+$Details = @("Shopfloor_PC","Special_PC")
+
+
+
+#################################################################################################################################################################################################### End ListBox
+
+
+################################################################################################################################################################################################# Start Text Fields
+$textBox1 = New-Object System.Windows.Forms.TextBox 
+$textBox1.Location = New-Object System.Drawing.Point(10,40) 
+$textBox1.Size = New-Object System.Drawing.Size(165,20) 
+$form.Controls.Add($textBox1)
+
+$textBox2 = New-Object System.Windows.Forms.TextBox 
+$textBox2.Location = New-Object System.Drawing.Point(10,100) 
+$textBox2.Size = New-Object System.Drawing.Size(165,20) 
+$form.Controls.Add($textBox2)
+
+
+
+#################################################################################################################################################################################################### End Text Fields
+$form.Add_Shown({$textbox1.Select()})
+$form.Add_Shown({$textbox2.Select()})
+[void] $form.ShowDialog()
