@@ -1,6 +1,8 @@
+Import-Module ActiveDirectory
+
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")  #loading the necessary .net libraries (using void to suppress output)
-
+Import-Module 
 
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "AD PC Config"
@@ -19,7 +21,7 @@ function Search_Hostname {
 
 
 function Search_AdminName {
-  $Dminname = $textBox2.Text
+  $Adminname = $textBox2.Text
  
   $Adminname_Result = Get-ADUser -Filter {name -eq "$Adminname"}
 
@@ -129,8 +131,6 @@ $OutputBox.Text = Get-Process | Out-String
 
 
 
-
-
 $Form.Controls.Add($DropDownBox)
 
 
@@ -181,7 +181,6 @@ $textBox2 = New-Object System.Windows.Forms.TextBox
 $textBox2.Location = New-Object System.Drawing.Point(10,100) 
 $textBox2.Size = New-Object System.Drawing.Size(165,20) 
 $form.Controls.Add($textBox2)
-
 
 
 #################################################################################################################################################################################################### End Text Fields
