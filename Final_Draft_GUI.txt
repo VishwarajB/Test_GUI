@@ -1,8 +1,6 @@
-Import-Module ActiveDirectory
-
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")  #loading the necessary .net libraries (using void to suppress output)
-Import-Module 
+
 
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "AD PC Config"
@@ -65,15 +63,79 @@ $form.CancelButton = $CancelButton
 $form.Controls.Add($CancelButton)
 
 $OKButton = New-Object System.Windows.Forms.Button
-$OKButton.Location = New-Object System.Drawing.Point(200,180)
-$OKButton.Size = New-Object System.Drawing.Size(90,23)
-$OKButton.Text = "Proceed"
-$OKButton.Add_Click({Classify_System}) 
+$OKButton.Location = New-Object System.Drawing.Point(10,350)
+$OKButton.Size = New-Object System.Drawing.Size(100,23)
+$OKButton.Text = "Shopfloor W 8.1"
+$OKButton.Add_Click({Classify_ShPC8.1}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton)
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(120,350)
+$OKButton.Size = New-Object System.Drawing.Size(100,23)
+$OKButton.Text = "Special W 8.1"
+$OKButton.Add_Click({Classify_SPPC8.1}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton)
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(230,350)
+$OKButton.Size = New-Object System.Drawing.Size(100,23)
+$OKButton.Text = "Shopfloor W 10"
+$OKButton.Add_Click({Classify_ShPC10}) 
+$form.AcceptButton = $OKButton
+$Form.Controls.Add($OKButton)
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(340,350)
+$OKButton.Size = New-Object System.Drawing.Size(100,23)
+$OKButton.Text = "Special W 10"
+$OKButton.Add_Click({Classify_SPPC10}) 
 $form.AcceptButton = $OKButton
 $Form.Controls.Add($OKButton)
 #################################################################################################################################################################################################### End Buttons
 
+function Classify_ShPC8.1 {
+  New-ADGroup -Name "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_GG" -DisplayName "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_GG" -Path OU=ShopfloorPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+
+  New-ADGroup -Name "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_LG" -DisplayName "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_LG" -Path OU=ShopfloorPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+  
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_GG" -Member $Machine_ID,$AdminName 
+ 
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_LG" -Member $Machine_ID,$AdminName
+
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_LG" -Member DAT-RL-$Machine_ID-ShopfloorPCAdmin_DAT_GG
+}
+
+function Classify_SPPC8.1 {
+
+  New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Path OU=SpecialPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+
+  New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Path OU=SpecialPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Member $Machine_ID,$AdminName 
+ 
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Member $Machine_ID,$AdminName
+
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Member DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG
+}
+
+function Classify_SPPC10 {
+
+  New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Path OU=SpecialPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+
+  New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Path OU=SpecialPC,OU=WorkstationsRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz
+
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Member $Machine_ID,$AdminName 
+ 
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Member $Machine_ID,$AdminName
+
+  Add-ADGroupMember -Identity "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Member SpecialPCAdmin_DAT_GG
+}
+
+
 #################################################################################################################################################################################################### Start Label
+
 $labelClub = New-Object System.Windows.Forms.Label
 $labelClub.Location = New-Object System.Drawing.Point(10,150)
 $labelClub.Size = New-Object System.Drawing.Size(280,20) 
@@ -100,71 +162,53 @@ $form.Controls.Add($labelFirst)
 
 
 #################################################################################################################################################################################################### Start ListBox
-Function Classify_System{
+$listBoxClub = New-Object System.Windows.Forms.ListBox 
+$listBoxClub.Location = New-Object System.Drawing.Size(10,250) 
+$listBoxClub.Size = New-Object System.Drawing.Size(200,20) 
+$listBoxClub.Height = 80
+ 
+ 
+ 
+ 
+#################################################################################################################################################################################################### End ListBox
+ 
+#################################################################################################################################################################################################### Start ComboBox
+ 
+$arrayCompany=@("Win 8.1","Win 10")
+ 
+$comboBoxCompany = New-Object System.Windows.Forms.ComboBox 
+$comboBoxCompany.Location = New-Object System.Drawing.Size(10,180) 
+$comboBoxCompany.Size = New-Object System.Drawing.Size(180,20) 
+$comboBoxCompany.DropDownHeight = 200 
+$Form.Controls.Add($comboBoxCompany) 
+ 
+foreach ($company in $arraycompany) {
+                      $comboBoxCompany.Items.Add($company)
+                              } 
+ 
+$comboBoxCompany_SelectedIndexChanged=
+{
+   If ($comboBoxCompany.text -eq "Win 8.1") 
+   {
+   $listBoxClub.Items.Clear()
+[void] $listBoxClub.Items.Add("Shopfloor PC")
+[void] $listBoxClub.Items.Add("Special PC")
 
+write-host "Win 8.1"
+ }
+ 
+   Else 
+   {
+   $listBoxClub.Items.Clear()
+[void] $listBoxClub.Items.Add("SHopfloor PC")
+[void] $listBoxClub.Items.Add("SPecial PC")
 
-
-$Selection = $DropDownBox.SelectedItem.ToString()
-
-
-
-if($Selection -eq "Shopfloor_PC"){
-
-
-
-$OutputBox.Text =  Get-Service | Out-String
-
-
-
+write-host "Win 10"
+   }
+ 
+$form.Controls.Add($listBoxClub)
 }
-
-elseif($Selection -eq "Special_PC"){
-
-
-
-$OutputBox.Text = Get-Process | Out-String
-
-
-}
-
-}
-
-
-
-$Form.Controls.Add($DropDownBox)
-
-
-
-$Details = @("Shopfloor_PC","Special_PC")
-
-
-
-foreach($Detail in $Details){
-
-
-
-$DropDownBox.Items.Add($Detail)
-
-
-
-}
-
-
-$DropDownBox = New-Object System.Windows.Forms.ComboBox
-
-$DropDownBox.Location = New-Object System.Drawing.Size(10,180)
-
-$DropDownBox.Size = New-Object System.Drawing.Size(180,20) 
-
-$DropDownBox.Height = 200
-
-
-
-$Form.Controls.Add($DropDownBox)
-
-
-
-$Details = @("Shopfloor_PC","Special_PC")
+$comboBoxCompany.add_SelectedIndexChanged($comboBoxCompany_SelectedIndexChanged)
 
 
 
@@ -184,6 +228,5 @@ $form.Controls.Add($textBox2)
 
 
 #################################################################################################################################################################################################### End Text Fields
-$form.Add_Shown({$textbox1.Select()})
-$form.Add_Shown({$textbox2.Select()})
+
 [void] $form.ShowDialog()
