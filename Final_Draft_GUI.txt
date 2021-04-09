@@ -8,15 +8,19 @@ $form.Text = "AD PC Config"
 $form.Size = New-Object System.Drawing.Size(550,650) 
 $form.StartPosition = "CenterScreen"
 
+$global:Machine_ID = $Machine_ID;
+$global:AdminName = $AdminName;
+
 #################################################################################################################################################################################################### Start functions
 function Search_Hostname {
   $Hostname = $textBox1.Text
  
   $Hostname_Result = Get-ADComputer -Filter "Name -like '$Hostname'" | select -expandproperty name -first 1
 
-  $Machine_ID = $Hostname_Result
+  $global:Machine_ID = $Hostname_Result
 
-  $OKButton.DialogResult = [System.Windows.Forms.MessageBox]::Show("You have searched for:'$Machine_ID'", 'Search Result')
+  $OKButton.DialogResult = [System.Windows.Forms.MessageBox]::Show("You have searched for:'$global:Machine_ID'", 'Search Result')
+
  
 }
 
@@ -26,8 +30,9 @@ function Search_AdminName {
  
   $Adminname_Result = Get-ADUser -Filter "Name -like '$Adminname'"  | select -expandproperty name -first 1
 
-  $AdminName = $Adminname_Result
-  $OKButton.DialogResult = [System.Windows.Forms.MessageBox]::Show("You have searched for:'$AdminName'", 'Search Result')
+  $global:AdminName = $Adminname_Result
+  
+  $OKButton.DialogResult = [System.Windows.Forms.MessageBox]::Show("You have searched for:'$global:AdminName'", 'Search Result')
  
 }
 #################################################################################################################################################################################################### End Function
@@ -101,7 +106,8 @@ $Form.Controls.Add($OKButton)
 #################################################################################################################################################################################################### End Buttons
 
 function Classify_ShPC8.1 {
-New-ADGroup -Name "DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_GG" -SamAccountName DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_GG -GroupCategory Security -GroupScope Global -DisplayName "DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_GG" -Path "OU=ShopFloorPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on ShopFloorPC-$Machine_ID"
+
+New-ADGroup -Name "DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_GG" -SamAccountName DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_GG -GroupCategory Security -GroupScope Global -DisplayName "DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_GG" -Path "OU=ShopFloorPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on ShopFloorPC-$Machine_ID"
 
 New-ADGroup -Name "DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_LG" -SamAccountName DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_LG -GroupCategory Security -GroupScope 0 -DisplayName "DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_LG" -Path "OU=ShopFloorPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on ShopFloorPC-$Machine_ID"
   
@@ -118,6 +124,7 @@ Get-ADGroup -Identity DAT-RL-$Machine_ID-ShopFloorPCAdmin_DAT_GG | Add-ADPrincip
 }
 
 function Classify_SPPC8.1 {
+
 
 New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -SamAccountName DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG -GroupCategory Security -GroupScope Global -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Path "OU=SpecialPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on SpecialPC-$Machine_ID"
 
@@ -136,19 +143,20 @@ Get-ADGroup -Identity DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG | Add-ADPrincipal
 
 function Classify_SPPC10 {
 
-New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -SamAccountName DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG -GroupCategory Security -GroupScope Global -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG" -Path "OU=SpecialPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on SpecialPC-$Machine_ID"
 
-New-ADGroup -Name "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -SamAccountName DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG -GroupCategory Security -GroupScope 0 -DisplayName "DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG" -Path "OU=SpecialPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on SpecialPC-$Machine_ID"
+New-ADGroup -Name "DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG" -SamAccountName DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG -GroupCategory Security -GroupScope Global -DisplayName "DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG" -Path "OU=SpecialPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on SpecialPC-$global:Machine_ID"
+
+New-ADGroup -Name "DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG" -SamAccountName DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG -GroupCategory Security -GroupScope 0 -DisplayName "DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG" -Path "OU=SpecialPC,OU=WorkstationRights,OU=Groups,OU=EWP,OU=DAT,DC=dat,DC=datwyler,DC=biz" -Description "Local Admins rights on SpecialPC-$global:Machine_ID"
   
-Add-ADGroupMember -Identity DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG -Members $AdminName
+Add-ADGroupMember -Identity DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG -Members $global:AdminName
 
-Add-ADGroupMember -Id DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG -Members $Machine_ID
+Add-ADGroupMember -Id DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG -Members $global:Machine_ID$
  
-Add-ADGroupMember -Identity DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG -Members $AdminName
+Add-ADGroupMember -Identity DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG -Members $global:AdminName
 
-Add-ADGroupMember -Id DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG -Members $Machine_ID
+Add-ADGroupMember -Id DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG -Members $global:Machine_ID$
 
-Get-ADGroup -Identity DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_GG | Add-ADPrincipalGroupMembership -MemberOf DAT-RL-$Machine_ID-SpecialPCAdmin_DAT_LG
+Get-ADGroup -Identity DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG | Add-ADPrincipalGroupMembership -MemberOf DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG
 
 }
 
