@@ -121,6 +121,8 @@ Add-ADGroupMember -Id DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_LG -Members
 
 Get-ADGroup -Identity DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_GG | Add-ADPrincipalGroupMembership -MemberOf DAT-RL-$global:Machine_ID-ShopFloorPCAdmin_DAT_LG
 
+
+
 }
 
 function Classify_SPPC8.1 {
@@ -157,6 +159,7 @@ Add-ADGroupMember -Identity DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG -Mem
 Add-ADGroupMember -Id DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG -Members $global:Machine_ID$
 
 Get-ADGroup -Identity DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_GG | Add-ADPrincipalGroupMembership -MemberOf DAT-RL-$global:Machine_ID-SpecialPCAdmin_DAT_LG
+
 
 }
 
